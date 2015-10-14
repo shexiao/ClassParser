@@ -1,14 +1,16 @@
 package com.compiler.model.attributeinfo;
 
 import java.io.InputStream;
+import java.util.List;
 
+import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.util.TransformUtil;
 
 public class AttributeInfo {
 	public static final String CONSTANTVALUE = "ConstantValue";
 	public static final String CODE = "Code";
 	public static final String STACKMAPTABLE = "StackMapTable";
-	public static final String EXCEPTION = "Exception";
+	public static final String EXCEPTIONS = "Exceptions";
 	public static final String INNERCLASSES = "InnerClasses";
 	public static final String ENCLOSINGMETHOD = "EnclosingMethod";
 	public static final String SYNTHETIC = "Synthetic";
@@ -28,6 +30,15 @@ public class AttributeInfo {
 	private byte[] attribute_name_index;
 	private byte[] attribute_length;
 	private byte[] info;
+	private List<ConstantPoolInfo> cp_info;
+	
+	public List<ConstantPoolInfo> getCp_info() {
+		return cp_info;
+	}
+
+	public void setCp_info(List<ConstantPoolInfo> cp_info) {
+		this.cp_info = cp_info;
+	}
 
 	public byte[] getInfo() {
 		return info;
@@ -65,7 +76,10 @@ public class AttributeInfo {
 		setInfo(bb);
 	}
 	
-	public void parseSelf(byte[] info) throws Exception {
-		
+	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
+		setAttribute_name_index(attributeInfo.getAttribute_name_index());
+		setAttribute_length(attributeInfo.getAttribute_length());
+		setInfo(attributeInfo.getInfo());
+		setCp_info(cp_info);
 	}
 }

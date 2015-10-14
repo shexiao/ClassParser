@@ -3,6 +3,7 @@ package com.compiler.model.attributeinfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.util.TransformUtil;
 
 public class LineNumberTable extends AttributeInfo{
@@ -26,7 +27,9 @@ public class LineNumberTable extends AttributeInfo{
 	}
 	
 	@Override
-	public void parseSelf(byte[] info) throws Exception {
+	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
+		super.parseSelf(attributeInfo, cp_info);
+		byte[] info = attributeInfo.getInfo();
 		int index = 0;
 		setLine_number_table_length(TransformUtil.subBytes(info, index, 2));
 		index += 2;
@@ -44,6 +47,22 @@ public class LineNumberTable extends AttributeInfo{
 			}
 			setLine_number_table(tables);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			int length = TransformUtil.bytesToInt(getLine_number_table_length());
+			System.out.println("\t\tLineNumberTable: ");
+			for (int i = 0; i < length; i++) {				
+				LineNumberTable1 table1 = this.line_number_table.get(i);
+				result += "\t\t\tline  " + TransformUtil.bytesToInt(table1.getLine_number()) +" : " + TransformUtil.bytesToInt(table1.getStart_pc()) + "\n";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	class LineNumberTable1 {

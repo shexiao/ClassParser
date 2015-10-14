@@ -6,11 +6,19 @@ import java.util.List;
 
 import com.compiler.model.ClassModel;
 import com.compiler.model.attributeinfo.AttributeInfo;
+import com.compiler.model.attributeinfo.BootstrapMethods;
 import com.compiler.model.attributeinfo.Code;
+import com.compiler.model.attributeinfo.ConstantValue;
+import com.compiler.model.attributeinfo.EnclosingMethod;
+import com.compiler.model.attributeinfo.Exceptions;
+import com.compiler.model.attributeinfo.InnerClasses;
 import com.compiler.model.attributeinfo.LineNumberTable;
 import com.compiler.model.attributeinfo.LocalVariableTable;
+import com.compiler.model.attributeinfo.LocalVariableTypeTable;
+import com.compiler.model.attributeinfo.Signature;
+import com.compiler.model.attributeinfo.SourceDebugExtension;
+import com.compiler.model.attributeinfo.SourceFile;
 import com.compiler.model.constantpool.ConstantPoolInfo;
-import com.compiler.model.constantpool.ConstantUtf8Info;
 import com.compiler.util.TransformUtil;
 
 public class AttributesParser implements IParser {
@@ -52,31 +60,63 @@ public class AttributesParser implements IParser {
 	public AttributeInfo parseDetail(ClassModel classModel, InputStream in) throws Exception {
 		byte[] bb = new byte[2];
 		in.read(bb, 0, 2);
-		int name_index = TransformUtil.bytesToInt(bb);
 		List<ConstantPoolInfo> cp_info = classModel.getConstant_pool();
-		ConstantUtf8Info utf8Info = (ConstantUtf8Info)cp_info.get(name_index);
-		String attribute_name = new String(utf8Info.getBytes(), "UTF-8");
+		String attribute_name = ClassModelParser.getUTF8(cp_info, bb);
+		
+		AttributeInfo attribute_info = new AttributeInfo();
+		attribute_info.parse(in, bb);
 		
 		switch (attribute_name) {
 		case AttributeInfo.CODE:
 			Code code = new Code();
-			code.parse(in, bb);
-			code.parseSelf(code.getInfo());
+			code.parseSelf(attribute_info, cp_info);
 			return code;
 		case AttributeInfo.LOCALVARIABLETABLE:
 			LocalVariableTable localVariableTable = new LocalVariableTable();
-			localVariableTable.parse(in, bb);
-			localVariableTable.parseSelf(localVariableTable.getInfo());
+			localVariableTable.parseSelf(attribute_info, cp_info);
 			return localVariableTable;
 		case AttributeInfo.LINENUMBERTABLE:
 			LineNumberTable lineNumberTable = new LineNumberTable();
-			lineNumberTable.parse(in, bb);
-			lineNumberTable.parseSelf(lineNumberTable.getInfo());
+			lineNumberTable.parseSelf(attribute_info, cp_info);
 			return lineNumberTable;
+		case AttributeInfo.CONSTANTVALUE:
+			ConstantValue constantValue = new ConstantValue();
+			constantValue.parseSelf(attribute_info, cp_info);
+			return constantValue;
+		case AttributeInfo.EXCEPTIONS:
+			Exceptions exceptions = new Exceptions();
+			exceptions.parseSelf(attribute_info, cp_info);
+			return exceptions;
+		case AttributeInfo.INNERCLASSES:
+			InnerClasses innerClasses = new InnerClasses();
+			innerClasses.parseSelf(attribute_info, cp_info);
+			return innerClasses;
+		case AttributeInfo.ENCLOSINGMETHOD:
+			EnclosingMethod enclosingMethod = new EnclosingMethod();
+			enclosingMethod.parseSelf(attribute_info, cp_info);
+			return enclosingMethod;
+		case AttributeInfo.SIGNATURE:
+			Signature signature = new Signature();
+			signature.parseSelf(attribute_info, cp_info);
+			return signature;
+		case AttributeInfo.SOURCEFILE:
+			SourceFile sourceFile = new SourceFile();
+			sourceFile.parseSelf(attribute_info, cp_info);
+			return sourceFile;
+		case AttributeInfo.SOURCEDEBUGEXTENSION:
+			SourceDebugExtension sourceDebugExtension = new SourceDebugExtension();
+			sourceDebugExtension.parseSelf(attribute_info, cp_info);
+			return sourceDebugExtension;
+		case AttributeInfo.LOCALVARIABLETYPETABLE:
+			LocalVariableTypeTable localVariableTypeTable = new LocalVariableTypeTable();
+			localVariableTypeTable.parseSelf(attribute_info, cp_info);
+			return localVariableTypeTable;
+		case AttributeInfo.BOOTSTRAPMETHODS:
+			BootstrapMethods bootstrapMethods = new BootstrapMethods();
+			bootstrapMethods.parseSelf(attribute_info, cp_info);
+			return bootstrapMethods;
+		default:
+			return attribute_info;
 		}
-		
-		AttributeInfo attribute_info = new AttributeInfo();
-		attribute_info.parse(in, bb);
-		return attribute_info;
 	}
 }

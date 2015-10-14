@@ -3,6 +3,8 @@ package com.compiler.model.attributeinfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class LocalVariableTable extends AttributeInfo{
@@ -26,7 +28,9 @@ public class LocalVariableTable extends AttributeInfo{
 	}
 	
 	@Override
-	public void parseSelf(byte[] info) throws Exception {
+	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
+		super.parseSelf(attributeInfo, cp_info);
+		byte[] info = attributeInfo.getInfo();
 		int index = 0;
 		setLocal_variable_table_length(TransformUtil.subBytes(info, index, 2));
 		index += 2;
@@ -45,10 +49,34 @@ public class LocalVariableTable extends AttributeInfo{
 				table.setDescriptor_index(TransformUtil.subBytes(info, index, 2));
 				index += 2;
 				table.setIndex(TransformUtil.subBytes(info, index, 2));
+				index += 2;
 				tables.add(table);
 			}
 			setLocal_variable_table(tables);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			int length = TransformUtil.bytesToInt(getLocal_variable_table_length());
+			System.out.println("\t\tLocalVariableTable:");
+			result += "\t\t\tstart\tlength\tslot\tname\tsignature\n";
+			for (int i = 0; i < length; i++) {
+				LocalVariableTable1 lvtable = this.local_variable_table.get(i);
+				result +="\t\t\t"+ TransformUtil.bytesToInt(lvtable.getStart_pc()) + "\t"
+						+ TransformUtil.bytesToInt(lvtable.getLength()) + "\t" 
+						+ TransformUtil.bytesToInt(lvtable.getIndex()) + "\t"
+//						+ TransformUtil.bytesToInt(lvtable.getName_index()) + "\t"
+//						+ TransformUtil.bytesToInt(lvtable.getDescriptor_index()) + "\n";
+						+ ClassModelParser.getUTF8(getCp_info(), lvtable.getName_index()) + "\t"
+						+ ClassModelParser.getUTF8(getCp_info(), lvtable.getDescriptor_index()) + "\n";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	class LocalVariableTable1 {

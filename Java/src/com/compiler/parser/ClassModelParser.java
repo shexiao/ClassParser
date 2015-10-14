@@ -1,7 +1,10 @@
 package com.compiler.parser;
 
+import java.util.List;
+
 import com.compiler.flag.AccessFlag;
-import com.compiler.model.attributeinfo.Code;
+import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.model.constantpool.ConstantUtf8Info;
 import com.compiler.util.TransformUtil;
 
 public class ClassModelParser {
@@ -129,5 +132,9 @@ public class ClassModelParser {
 		return result;
 	}
 	
-	
+	public static String getUTF8(List<ConstantPoolInfo> cp_info, byte[] name_index) throws Exception{
+		int index = TransformUtil.bytesToInt(name_index);
+		ConstantUtf8Info utf8Info = (ConstantUtf8Info)cp_info.get(index);
+		return new String(utf8Info.getBytes(), "UTF-8");
+	}
 }

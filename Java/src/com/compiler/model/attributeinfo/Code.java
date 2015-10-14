@@ -3,6 +3,8 @@ package com.compiler.model.attributeinfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class Code extends AttributeInfo{
@@ -80,7 +82,9 @@ public class Code extends AttributeInfo{
 	}
 	
 	@Override
-	public void parseSelf(byte[] info) throws Exception{
+	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception{
+		super.parseSelf(attributeInfo, cp_info);
+		byte[] info = attributeInfo.getInfo();
 		int index = 0;
 		setMax_stack(TransformUtil.subBytes(info, index, 2));
 		index += 2;
@@ -120,15 +124,38 @@ public class Code extends AttributeInfo{
 				attribute_info.setAttribute_name_index(TransformUtil.subBytes(info, index, 2));
 				index += 2;
 				
-				attribute_info.setAttribute_length(TransformUtil.subBytes(info, index, 2));
-				index += 2;
+				attribute_info.setAttribute_length(TransformUtil.subBytes(info, index, 4));
+				index += 4;
 				
 				int length = TransformUtil.bytesToInt(attribute_info.getAttribute_length());
 				if (length > 0) {
 					attribute_info.setInfo(TransformUtil.subBytes(info, index, length));
 					index += length;
 				}
-				attributes.add(attribute_info);
+				
+				String name = ClassModelParser.getUTF8(cp_info, attribute_info.getAttribute_name_index());
+				switch (name) {
+				case AttributeInfo.LINENUMBERTABLE:
+					LineNumberTable lineNumberTable = new LineNumberTable();
+					lineNumberTable.parseSelf(attribute_info, cp_info);
+					attributes.add(lineNumberTable);
+					break;
+				case AttributeInfo.LOCALVARIABLETABLE:
+					LocalVariableTable localVariableTable = new LocalVariableTable();
+					localVariableTable.parseSelf(attribute_info, cp_info);
+					attributes.add(localVariableTable);
+					break;
+				case AttributeInfo.LOCALVARIABLETYPETABLE:
+					LocalVariableTypeTable localVariableTypeTable = new LocalVariableTypeTable();
+					localVariableTypeTable.parseSelf(attribute_info, cp_info);
+					attributes.add(localVariableTypeTable);
+					break;
+				default:
+					attributes.add(attribute_info);
+					break;
+				}
+				
+				
 			}
 			setAttributes(attributes);
 		}

@@ -8,7 +8,6 @@ import com.compiler.model.MethodInfo;
 import com.compiler.model.attributeinfo.AttributeInfo;
 import com.compiler.model.attributeinfo.Code;
 import com.compiler.model.constantpool.ConstantPoolInfo;
-import com.compiler.model.constantpool.ConstantUtf8Info;
 import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
@@ -72,19 +71,19 @@ public class ClassModelPrinter implements IPrinter{
 					List<AttributeInfo> attributes = method_info.getAttributes();
 					List<ConstantPoolInfo> cp_info = classModel.getConstant_pool();
 					for (int i = 0; i < attributes.size(); i++) {
-						AttributeInfo attribute_info = attributes.get(i);
-						int name_index = TransformUtil.bytesToInt(attribute_info.getAttribute_name_index());
-						ConstantUtf8Info info = (ConstantUtf8Info)cp_info.get(name_index);			
-						String name = new String(info.getBytes(), "UTF-8");
+						AttributeInfo attribute_info = attributes.get(i);			
+						String name = ClassModelParser.getUTF8(cp_info, attribute_info.getAttribute_name_index());
 						System.out.println("\tattributes[" + i + "] name : " + name);
 						System.out.println("\tattributes[" + i + "] attributes length : " + TransformUtil.bytesToInt(attribute_info.getAttribute_length()));
 						if (name.equals(AttributeInfo.CODE)) {
-							Code code = new Code();
-							code.setAttribute_name_index(attribute_info.getAttribute_length());
-							code.setAttribute_length(attribute_info.getAttribute_length());
-							code.parseSelf(attribute_info.getInfo());
+							Code code = (Code) attribute_info;
 							System.out.println("\tattributes[" + i + "] attributes info : ");
 							System.out.println(code.toString());
+							
+							List<AttributeInfo> code_attributes = code.getAttributes();
+							for (int j = 0; j < code_attributes.size(); j++) {
+								System.out.println(code_attributes.get(j).toString());
+							}
 						}
 						
 						
@@ -102,6 +101,9 @@ public class ClassModelPrinter implements IPrinter{
 		System.out.println("\tattributes count : " + TransformUtil.bytesToInt(classModel.getAttribute_count()));
 		List<AttributeInfo> attributes = classModel.getAttributes();
 		if (attributes != null) {
+			for (AttributeInfo attribute_info : attributes) {
+				System.out.println(attribute_info.toString());
+			}
 		}
 	}
 
