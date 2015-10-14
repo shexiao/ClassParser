@@ -2,7 +2,6 @@ package com.compiler.printer;
 
 import java.util.List;
 
-import com.compiler.ClassModelParser;
 import com.compiler.model.ClassModel;
 import com.compiler.model.FieldInfo;
 import com.compiler.model.MethodInfo;
@@ -10,6 +9,7 @@ import com.compiler.model.attributeinfo.AttributeInfo;
 import com.compiler.model.attributeinfo.Code;
 import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.model.constantpool.ConstantUtf8Info;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class ClassModelPrinter implements IPrinter{
@@ -82,7 +82,7 @@ public class ClassModelPrinter implements IPrinter{
 							Code code = new Code();
 							code.setAttribute_name_index(attribute_info.getAttribute_length());
 							code.setAttribute_length(attribute_info.getAttribute_length());
-							code.parse(attribute_info.getInfo());
+							code.parseSelf(attribute_info.getInfo());
 							System.out.println("\tattributes[" + i + "] attributes info : ");
 							System.out.println(code.toString());
 						}

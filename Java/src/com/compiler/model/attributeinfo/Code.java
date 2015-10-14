@@ -79,7 +79,8 @@ public class Code extends AttributeInfo{
 		this.attributes = attributes;
 	}
 	
-	public void parse(byte[] info) throws Exception{
+	@Override
+	public void parseSelf(byte[] info) throws Exception{
 		int index = 0;
 		setMax_stack(TransformUtil.subBytes(info, index, 2));
 		index += 2;

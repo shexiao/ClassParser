@@ -3,6 +3,7 @@ package com.compiler;
 import java.io.FileInputStream;
 
 import com.compiler.model.ClassModel;
+import com.compiler.parser.Parser;
 import com.compiler.printer.IPrinter;
 import com.compiler.reflect.PrinterProxy;
 

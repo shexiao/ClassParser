@@ -1,4 +1,4 @@
-package com.compiler;
+package com.compiler.parser;
 
 import com.compiler.flag.AccessFlag;
 import com.compiler.model.attributeinfo.Code;
