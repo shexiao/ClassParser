@@ -34,12 +34,14 @@ public class ConstantLongOrDoubleInfo extends ConstantPoolInfo {
 	@Override
 	public String toString() {
 		String result = "";
-		if (tag == ConstantPoolInfo.CONSTANT_LONG) {
-			try {
-				result = "const #" + getIndex() + " =Long\t " + TransformUtil.bytesToLong(high_bytes, low_bytes) + "L";
-			} catch (Exception e) {
+		try {
+			if (tag == ConstantPoolInfo.CONSTANT_LONG) {
 				
+					result = "const #" + getIndex() + " =Long\t " + TransformUtil.bytesToLong(high_bytes, low_bytes) + "L";
+			} else if (tag == ConstantPoolInfo.CONSTANT_DOUBLE) {
+				result = "const #" + getIndex() + " =Double\t " + TransformUtil.bytesToDouble(high_bytes, low_bytes) + "d";
 			}
+		} catch (Exception e) {
 			
 		}
 		return result;

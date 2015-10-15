@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class Exceptions extends AttributeInfo {
@@ -40,5 +41,21 @@ public class Exceptions extends AttributeInfo {
 			}
 			setException_index_table(exceptions);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			if (TransformUtil.bytesToInt(getNumber_of_exceptions()) > 0) {
+				result = "Exceptions : \n";
+				for (byte[] bb : getException_index_table()) {
+					result += "\texception : " + ClassModelParser.getConstatnClass(getCp_info(), bb) + "\n";
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+		return result;
 	}
 }

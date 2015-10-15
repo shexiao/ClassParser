@@ -3,6 +3,7 @@ package com.compiler.model.attributeinfo;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 
 public class ConstantValue extends AttributeInfo{
 	private byte[] constantvalue_index;
@@ -19,5 +20,16 @@ public class ConstantValue extends AttributeInfo{
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception{
 		super.parseSelf(attributeInfo, cp_info);
 		setConstantvalue_index(attributeInfo.getInfo());
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			result = "ConstantValue : " + ClassModelParser.getUTF8(getCp_info(), getConstantvalue_index());
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

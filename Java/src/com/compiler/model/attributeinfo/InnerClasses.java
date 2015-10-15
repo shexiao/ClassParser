@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class InnerClasses extends AttributeInfo {
@@ -53,6 +54,27 @@ public class InnerClasses extends AttributeInfo {
 			}
 			setClasses(clses);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			if (TransformUtil.bytesToInt(getNumber_of_classes()) > 0) {
+				int index = 0;
+				for (Classes cls : getClasses()) {
+					result += "InnerClass[" + index + "]: \n";
+					result += "\tinner_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getInner_class_info_index()) + "\n";
+					result += "\touter_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getOuter_class_info_index()) + "\n";
+					result += "\tinner_name : " + ClassModelParser.getUTF8(getCp_info(), cls.getInner_name_index()) + "\n";
+					result += "\tinner_class_access_flag : " + ClassModelParser.parseInnerClassAccessFlag(cls.getInner_class_access_flags()) + "\n";
+					index++;
+				}
+			}
+		} catch (Exception e) {
+			
+		}
+		return result;
 	}
 
 	class Classes {

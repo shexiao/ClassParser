@@ -20,4 +20,15 @@ public class SourceDebugExtension extends AttributeInfo {
 		super.parseSelf(attributeInfo, cp_info);
 		setDebug_extension(attributeInfo.getInfo());
 	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			result = "debug_extension : " + new String(getDebug_extension(), "UTF-8") + "\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

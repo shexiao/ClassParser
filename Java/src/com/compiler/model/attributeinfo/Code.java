@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.opcodes.Instructions;
 import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
@@ -166,9 +167,11 @@ public class Code extends AttributeInfo{
 	public String toString() {
 		String result = "";
 		try {
+			Instructions instr = Instructions.getInstance();
 			result += "\t\tmax_stack : " + TransformUtil.bytesToInt(getMax_stack()) + "\n";
 			result += "\t\tmax_local : " + TransformUtil.bytesToInt(getMax_locals()) + "\n";
 			result += "\t\tcode_length : " + TransformUtil.bytesToInt(getCode_length()) + "\n";
+			result += "\t\tcode : \n" + instr.parse(getCode(), "\t\t\t") + "\n";
 			result += "\t\texception_table length : " + TransformUtil.bytesToInt(getException_table_length()) + "\n";
 			result += "\t\tattributes_count : " + TransformUtil.bytesToInt(getAttributes_count()) + "\n";
 			

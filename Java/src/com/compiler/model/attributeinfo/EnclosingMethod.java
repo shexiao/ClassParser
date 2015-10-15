@@ -3,6 +3,7 @@ package com.compiler.model.attributeinfo;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class EnclosingMethod extends AttributeInfo {
@@ -30,5 +31,18 @@ public class EnclosingMethod extends AttributeInfo {
 		setClass_index(TransformUtil.subBytes(info, index, 2));
 		index += 2;
 		setMethod_index(TransformUtil.subBytes(info, index, 2));
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			result += "EnclosingMethod : \n";
+			result += "\tclass : " + ClassModelParser.getConstatnClass(getCp_info(), getClass_index()) + "\n";
+			result += "\tmethod : " + ClassModelParser.getConstantNameAndType(getCp_info(), getMethod_index()) +"\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.parser.ClassModelParser;
 import com.compiler.util.TransformUtil;
 
 public class LocalVariableTypeTable extends AttributeInfo {
@@ -54,6 +55,23 @@ public class LocalVariableTypeTable extends AttributeInfo {
 			}
 			setLocal_variable_type_table(typeTables);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		String result = "";
+		try {
+			if (TransformUtil.bytesToInt(getLocal_variable_type_table_length()) > 0) {
+				for (TypeTable table : getLocal_variable_type_table()) {
+					result += "LocalVariableTypeTable[" + table.getIndex() + "]:\n";
+					result += "\tstart_pc : length -> " +  table.getStart_pc() + " : " + table.getLength() + "\n";
+					result += "\tname : signature -> " + ClassModelParser.getUTF8(getCp_info(), table.getName_index()) + " : " + ClassModelParser.getUTF8(getCp_info(), table.getSignature_index()) + "\n";
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	class TypeTable {

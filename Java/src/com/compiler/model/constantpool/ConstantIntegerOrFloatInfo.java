@@ -26,18 +26,15 @@ public class ConstantIntegerOrFloatInfo extends ConstantPoolInfo {
 	@Override
 	public String toString() {
 		String result = "";
-		if (tag == CONSTANT_INTEGER) {
-			try {
-				result = "const #" + getIndex() + " =integer\t #" + TransformUtil.bytesToInt(bytes);
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			if (tag == CONSTANT_INTEGER) {
+				
+					result = "const #" + getIndex() + " =Integer\t " + TransformUtil.bytesToInt(bytes);
+			} else if (tag == CONSTANT_FLOAT) {
+					result = "const #" + getIndex() + " =Float\t " + TransformUtil.bytesToFloat(bytes) + "f";
 			}
-		} else if (tag == CONSTANT_FLOAT) {
-			try {
-				result = "const #" + getIndex() + " =float\t #" + TransformUtil.bytesToInt(bytes);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return result;
 	}

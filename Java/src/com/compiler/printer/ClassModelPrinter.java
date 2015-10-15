@@ -35,8 +35,8 @@ public class ClassModelPrinter implements IPrinter{
 	
 	public void printClassInfo(ClassModel classModel) throws Exception {
 		System.out.println("\taccess_flag : " + ClassModelParser.parseClassAccessFlag(classModel.getAccess_flags()));
-		System.out.println("\tthis_class index : #" + TransformUtil.bytesToInt(classModel.getThis_class()));
-		System.out.println("\tsuper_class index : #" + TransformUtil.bytesToInt(classModel.getSuper_class()));
+		System.out.println("\tthis_class : " + ClassModelParser.getConstatnClass(classModel.getConstant_pool(), classModel.getThis_class()));
+		System.out.println("\tsuper_class : " + ClassModelParser.getConstatnClass(classModel.getConstant_pool(), classModel.getSuper_class()));
 		System.out.println("\tinterfaces count : " + TransformUtil.bytesToInt(classModel.getInterfaces_count()));
 	}
 
@@ -48,8 +48,8 @@ public class ClassModelPrinter implements IPrinter{
 		if (fields != null) {
 			for (FieldInfo field_info : fields) {
 				System.out.println("\taccess_flag : " + ClassModelParser.parseFiledAccessFlag(field_info.getAccess_flags()));
-				System.out.println("\tname_index : " + TransformUtil.bytesToInt(field_info.getName_index()));
-				System.out.println("\tdescriptor_index : " + TransformUtil.bytesToInt(field_info.getDescriptor_index()));
+				System.out.println("\tname_index : " + ClassModelParser.getUTF8(classModel.getConstant_pool(), field_info.getName_index()));
+				System.out.println("\tdescriptor_index : " + ClassModelParser.getUTF8(classModel.getConstant_pool(), field_info.getDescriptor_index()));
 				System.out.println("\tattributes count : " + TransformUtil.bytesToInt(field_info.getAttributes_count()));
 			}
 		}
@@ -63,8 +63,8 @@ public class ClassModelPrinter implements IPrinter{
 		if (methods != null) {
 			for (MethodInfo method_info : methods) {
 				System.out.println("\taccess_flag : " + ClassModelParser.parseMethodAccessFlag(method_info.getAccess_flags()));
-				System.out.println("\tname_index : " + TransformUtil.bytesToInt(method_info.getName_index()));
-				System.out.println("\tdescriptor_index : " + TransformUtil.bytesToInt(method_info.getDescriptor_index()));
+				System.out.println("\tname_index : " + ClassModelParser.getUTF8(classModel.getConstant_pool(), method_info.getName_index()));
+				System.out.println("\tdescriptor_index : " + ClassModelParser.getUTF8(classModel.getConstant_pool(), method_info.getDescriptor_index()));
 				int count = TransformUtil.bytesToInt(method_info.getAttributes_count());
 				System.out.println("\tattributes count : " + count);
 				if (count > 0) {
@@ -84,6 +84,8 @@ public class ClassModelPrinter implements IPrinter{
 							for (int j = 0; j < code_attributes.size(); j++) {
 								System.out.println(code_attributes.get(j).toString());
 							}
+						} else {
+							System.out.println("\t\t" + attribute_info.toString());
 						}
 						
 						

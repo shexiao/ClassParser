@@ -11,7 +11,8 @@ public class ParseByteCode {
 	public static void main(String[] args) throws Exception {
 //		String filepath = "F:\\迅雷下载\\asm-5.0.4-bin\\asm-5.0.4\\examples\\helloworld\\Example.class";
 //		String filepath = "D:\\mars_workspace\\Java\\bin\\com\\sample\\Sample1.class";
-		String filepath = "C:\\Users\\Administrator\\Desktop\\桌面文件\\Sample1.class";
+//		String filepath = "C:\\Users\\Administrator\\Desktop\\桌面文件\\Sample1.class";
+		String filepath = "E:\\study\\java\\bytecode\\Hello.class";
 		FileInputStream stream = new FileInputStream(filepath);
 		try {
 			Parser p = new Parser();
