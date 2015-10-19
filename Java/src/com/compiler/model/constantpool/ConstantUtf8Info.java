@@ -33,11 +33,12 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
 			//System.out.println(TransformUtil.getHex(bytes));
-			result = "const #" + getIndex() + " =Utf8\t " + new String(bytes, "UTF-8");
+			result = space + "const #" + getIndex() + " =Utf8" + space + new String(bytes, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -30,9 +30,8 @@ public class LineNumberTable extends AttributeInfo{
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
-		int index = 0;
+		int[] index = new int[]{0};
 		setLine_number_table_length(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		
 		int length = TransformUtil.bytesToInt(getLine_number_table_length());
 		if (length > 0) {
@@ -40,9 +39,7 @@ public class LineNumberTable extends AttributeInfo{
 			for (int i = 0; i < length; i++) {
 				LineNumberTable1 table = new LineNumberTable1();
 				table.setStart_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				table.setLine_number(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				tables.add(table);
 			}
 			setLine_number_table(tables);
@@ -50,14 +47,16 @@ public class LineNumberTable extends AttributeInfo{
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
-			int length = TransformUtil.bytesToInt(getLine_number_table_length());
-			System.out.println("\t\tLineNumberTable: ");
-			for (int i = 0; i < length; i++) {				
+			int len = TransformUtil.bytesToInt(getLine_number_table_length());
+			result += space + "LineNumberTable:\n";
+			for (int i = 0; i < len; i++) {				
 				LineNumberTable1 table1 = this.line_number_table.get(i);
-				result += "\t\t\tline  " + TransformUtil.bytesToInt(table1.getLine_number()) +" : " + TransformUtil.bytesToInt(table1.getStart_pc()) + "\n";
+				result += space1 + "line  " + TransformUtil.bytesToInt(table1.getLine_number()) +" : " + TransformUtil.bytesToInt(table1.getStart_pc()) + "\n";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

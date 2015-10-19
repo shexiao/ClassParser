@@ -27,16 +27,13 @@ public class Exceptions extends AttributeInfo {
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
-		int index = 0;
-		setNumber_of_exceptions(TransformUtil.subBytes(info, index, 2));
-		index += 2;
-		
+		int[] index = new int[]{0};
+		setNumber_of_exceptions(TransformUtil.subBytes(info, index, 2));		
 		int number = TransformUtil.bytesToInt(getNumber_of_exceptions());
 		if (number > 0) {
 			List<byte[]> exceptions = new ArrayList<byte[]>();
 			for (int i = 0; i < number; i++) {
 				byte[] exception = TransformUtil.subBytes(info, index, 2);
-				index += 2;
 				exceptions.add(exception);
 			}
 			setException_index_table(exceptions);
@@ -44,13 +41,15 @@ public class Exceptions extends AttributeInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
 			if (TransformUtil.bytesToInt(getNumber_of_exceptions()) > 0) {
-				result = "Exceptions : \n";
+				result = space + "Exceptions : \n";
 				for (byte[] bb : getException_index_table()) {
-					result += "\texception : " + ClassModelParser.getConstatnClass(getCp_info(), bb) + "\n";
+					result += space1 + "exception : " + ClassModelParser.getConstatnClass(getCp_info(), bb) + "\n";
 				}
 			}
 		} catch (Exception e) {

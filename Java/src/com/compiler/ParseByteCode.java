@@ -13,6 +13,8 @@ public class ParseByteCode {
 //		String filepath = "D:\\mars_workspace\\Java\\bin\\com\\sample\\Sample1.class";
 //		String filepath = "C:\\Users\\Administrator\\Desktop\\桌面文件\\Sample1.class";
 		String filepath = "E:\\study\\java\\bytecode\\Hello.class";
+//		String filepath = "E:\\study\\java\\bytecode\\OpcodeInfo.class";
+//		String filepath = "D:\\mars_workspace\\FileMessage\\bin\\org\\filemessage\\core\\FileHandler.class";
 		FileInputStream stream = new FileInputStream(filepath);
 		try {
 			Parser p = new Parser();

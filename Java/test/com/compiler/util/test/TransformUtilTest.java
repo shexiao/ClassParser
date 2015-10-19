@@ -6,10 +6,10 @@ import com.compiler.util.TransformUtil;
 
 public class TransformUtilTest {
 	
-	//@Test
+	@Test
 	public void testBytesToInt() {
 		int i = (255 * 256 * 256 );
-		byte[] bytes = new byte[]{(byte)0x00, (byte)0xff, (byte)0x00, (byte)0x00};
+		byte[] bytes = new byte[]{(byte)0xff, (byte)0x00, (byte)0x00};
 		int result;
 		try {
 			result = TransformUtil.bytesToInt(bytes);
@@ -54,7 +54,7 @@ public class TransformUtilTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testBytesToDouble() {
 		byte[] bytes0 = new byte[]{(byte)0x40, (byte)0x20, (byte)0x99, (byte)0x99};
 		byte[] bytes1 = new byte[]{(byte)0x99, (byte)0x99, (byte)0x99, (byte)0x9a};

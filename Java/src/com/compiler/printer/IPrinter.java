@@ -4,6 +4,7 @@ import com.compiler.annotation.Printer;
 import com.compiler.model.ClassModel;
 
 public interface IPrinter {
+	
 	@Printer(info="header info")
 	public void printHeader(ClassModel classModel) throws Exception;
 	

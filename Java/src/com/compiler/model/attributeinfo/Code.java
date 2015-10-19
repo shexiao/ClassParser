@@ -86,52 +86,37 @@ public class Code extends AttributeInfo{
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception{
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
-		int index = 0;
+		int[] index = new int[]{0};
 		setMax_stack(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		setMax_locals(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		setCode_length(TransformUtil.subBytes(info, index, 4));
-		index += 4;
 		int clen = TransformUtil.bytesToInt(getCode_length());
 		setCode(TransformUtil.subBytes(info, index, clen));
-		index += clen;
 		setException_table_length(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		int elen = TransformUtil.bytesToInt(getException_table_length());
 		if (elen > 0) {
 			List<ExceptionTable> tables = new ArrayList<ExceptionTable>();
 			for (int i = 0; i < elen; i++) {
 				ExceptionTable exception_table = new ExceptionTable();
 				exception_table.setStart_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				exception_table.setEnd_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				exception_table.setHandler_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				exception_table.setCatch_type(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				tables.add(exception_table);
 			}
 		}
 		
 		setAttributes_count(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		int count = TransformUtil.bytesToInt(getAttributes_count());
 		if (count > 0) {
 			List<AttributeInfo> attributes = new ArrayList<AttributeInfo>();
 			for (int i = 0; i < count; i++) {
 				AttributeInfo attribute_info = new AttributeInfo();
 				attribute_info.setAttribute_name_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
-				
 				attribute_info.setAttribute_length(TransformUtil.subBytes(info, index, 4));
-				index += 4;
-				
 				int length = TransformUtil.bytesToInt(attribute_info.getAttribute_length());
 				if (length > 0) {
 					attribute_info.setInfo(TransformUtil.subBytes(info, index, length));
-					index += length;
 				}
 				
 				String name = ClassModelParser.getUTF8(cp_info, attribute_info.getAttribute_name_index());
@@ -151,6 +136,11 @@ public class Code extends AttributeInfo{
 					localVariableTypeTable.parseSelf(attribute_info, cp_info);
 					attributes.add(localVariableTypeTable);
 					break;
+				case AttributeInfo.STACKMAPTABLE:
+					StackMapTable stackMapTable = new StackMapTable();
+					stackMapTable.parseSelf(attribute_info, cp_info);
+					attributes.add(stackMapTable);
+					break;
 				default:
 					attributes.add(attribute_info);
 					break;
@@ -164,16 +154,24 @@ public class Code extends AttributeInfo{
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
 			Instructions instr = Instructions.getInstance();
-			result += "\t\tmax_stack : " + TransformUtil.bytesToInt(getMax_stack()) + "\n";
-			result += "\t\tmax_local : " + TransformUtil.bytesToInt(getMax_locals()) + "\n";
-			result += "\t\tcode_length : " + TransformUtil.bytesToInt(getCode_length()) + "\n";
-			result += "\t\tcode : \n" + instr.parse(getCode(), "\t\t\t") + "\n";
-			result += "\t\texception_table length : " + TransformUtil.bytesToInt(getException_table_length()) + "\n";
-			result += "\t\tattributes_count : " + TransformUtil.bytesToInt(getAttributes_count()) + "\n";
+			result += space + "max_stack : " + TransformUtil.bytesToInt(getMax_stack()) + "\n";
+			result += space + "max_local : " + TransformUtil.bytesToInt(getMax_locals()) + "\n";
+			result += space + "code_length : " + TransformUtil.bytesToInt(getCode_length()) + "\n";
+			result += space + "code : \n" + instr.parse(getCode(), TransformUtil.spaces(length + 4)) + "\n";
+			result += space + "exception_table length : " + TransformUtil.bytesToInt(getException_table_length()) + "\n";
+			result += space + "attributes_count : " + TransformUtil.bytesToInt(getAttributes_count()) + "\n";
+			List<AttributeInfo> attributes = getAttributes();
+			for (int j = 0; j < attributes.size(); j++) {
+//				String attr_name = ClassModelParser.getUTF8(cp_info, code_attributes.get(j).getAttribute_name_index());
+//				if (attr_name.equals(AttributeInfo.STACKMAPTABLE)) {
+					result += attributes.get(j).print(length + 4) + "\n";
+//				}
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

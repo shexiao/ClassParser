@@ -27,19 +27,20 @@ public class EnclosingMethod extends AttributeInfo {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
 		
-		int index = 0;
+		int[] index = new int[]{0};
 		setClass_index(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		setMethod_index(TransformUtil.subBytes(info, index, 2));
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
-			result += "EnclosingMethod : \n";
-			result += "\tclass : " + ClassModelParser.getConstatnClass(getCp_info(), getClass_index()) + "\n";
-			result += "\tmethod : " + ClassModelParser.getConstantNameAndType(getCp_info(), getMethod_index()) +"\n";
+			result += space + "EnclosingMethod : \n";
+			result += space1 + "class : " + ClassModelParser.getConstatnClass(getCp_info(), getClass_index()) + "\n";
+			result += space1 + "method : " + ClassModelParser.getConstantNameAndType(getCp_info(), getMethod_index()) +"\n";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

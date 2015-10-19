@@ -31,9 +31,8 @@ public class BootstrapMethods extends AttributeInfo {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
 		
-		int index = 0;
+		int[] index = new int[]{0};
 		setNum_bootstrap_methods(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		
 		int num = TransformUtil.bytesToInt(getNum_bootstrap_methods());
 		if (num > 0) {
@@ -41,16 +40,13 @@ public class BootstrapMethods extends AttributeInfo {
 			for (int i = 0; i < num; i++) {
 				BootstrapMethod bmethod = new BootstrapMethod();
 				bmethod.setBootstrap_method_ref(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				bmethod.setNum_bootstrap_arguments(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				
 				int arg_num = TransformUtil.bytesToInt(bmethod.getNum_bootstrap_arguments());
 				if (arg_num > 0) {
 					List<byte[]> barguments = new ArrayList<byte[]>();
 					for (int j = 0; j < arg_num; j++) {
 						barguments.add(TransformUtil.subBytes(info, index, 2));
-						index += 2;
 					}
 					bmethod.setBootstrap_arguments(barguments);
 				}

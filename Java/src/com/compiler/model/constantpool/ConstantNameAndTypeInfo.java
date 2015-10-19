@@ -33,10 +33,11 @@ public class ConstantNameAndTypeInfo extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
-			result = "const #" + getIndex() + " =NameAndType\t #" + TransformUtil.bytesToInt(name_index) + ":#" + TransformUtil.bytesToInt(descriptor_index);
+			result = space + "const #" + getIndex() + " =NameAndType" + space + "#" + TransformUtil.bytesToInt(name_index) + ":#" + TransformUtil.bytesToInt(descriptor_index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.parser.ClassModelParser;
+import com.compiler.util.TransformUtil;
 
 public class Signature extends AttributeInfo {
 	private byte[] signature_index;
@@ -23,10 +24,11 @@ public class Signature extends AttributeInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
-			result = "Signature : " + ClassModelParser.getUTF8(getCp_info(), getSignature_index());
+			result = space + "Signature : " + ClassModelParser.getUTF8(getCp_info(), getSignature_index());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

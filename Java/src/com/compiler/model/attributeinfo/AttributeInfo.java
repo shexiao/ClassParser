@@ -24,6 +24,7 @@ public class AttributeInfo {
 	public static final String RUNTIMEVISIBLEANNOTATIONS = "RuntimeVisibleAnnotations";
 	public static final String RUNTIMEINVISIBLEANNOTATIONS = "RuntimeInvisibleAnnotations";
 	public static final String RUNTIMEVISIBLEPARAMETERANNOTATIONS = "RuntimeVisibleParameterAnnotations";
+	public static final String RUNTIMEINVISIBLEPARAMETERANNOTATIONS = "RuntimeInvisibleParameterAnnotations";
 	public static final String ANNOTATIONDEFAULT = "AnnotationDefault";
 	public static final String BOOTSTRAPMETHODS = "BootstrapMethods";
 
@@ -81,5 +82,9 @@ public class AttributeInfo {
 		setAttribute_length(attributeInfo.getAttribute_length());
 		setInfo(attributeInfo.getInfo());
 		setCp_info(cp_info);
+	}
+	
+	public String print(int length) throws Exception {
+		return toString();
 	}
 }

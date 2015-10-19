@@ -3,6 +3,7 @@ package com.compiler.model.attributeinfo;
 import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
+import com.compiler.util.TransformUtil;
 
 public class SourceDebugExtension extends AttributeInfo {
 	private byte[] debug_extension;
@@ -22,10 +23,11 @@ public class SourceDebugExtension extends AttributeInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
-			result = "debug_extension : " + new String(getDebug_extension(), "UTF-8") + "\n";
+			result = space + "debug_extension : " + new String(getDebug_extension(), "UTF-8") + "\n";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

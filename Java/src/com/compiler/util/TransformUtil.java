@@ -92,15 +92,24 @@ public class TransformUtil {
 		return result;
 	}
 	
-	public static byte[] subBytes(byte[] bytes, int start, int len) throws Exception{
-		if (start + len > bytes.length) {
+	public static byte[] subBytes(byte[] bytes, int[] start, int len) throws Exception{
+		if (start[0] + len > bytes.length) {
 			throw new Exception("out of bound");
 		}
 		byte[] result = new byte[len];
 		int j = 0;
-		for (int i = start; i < start + len; i++) {
+		for (int i = start[0]; i < start[0] + len; i++) {
 			result[j] = bytes[i];
 			j++;
+		}
+		start[0] += len;
+		return result;
+	}
+	
+	public static String spaces(int length) {
+		String result = "";
+		for (int i = 0; i < length; i++) {
+			result += " ";
 		}
 		return result;
 	}

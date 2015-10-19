@@ -43,4 +43,7 @@ public class ConstantPoolInfo {
 		setTag(tag);
 	}
 	
+	public String print(int length) throws Exception{
+		return toString();
+	}
 }

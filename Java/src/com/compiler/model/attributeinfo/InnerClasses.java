@@ -32,9 +32,8 @@ public class InnerClasses extends AttributeInfo {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
 		
-		int index = 0;
+		int[] index = new int[]{0};
 		setNumber_of_classes(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		
 		int number = TransformUtil.bytesToInt(getNumber_of_classes());
 		if (number > 0) {
@@ -42,13 +41,9 @@ public class InnerClasses extends AttributeInfo {
 			for (int i = 0; i < number; i++) {
 				Classes cls = new Classes();
 				cls.setInner_class_info_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				cls.setOuter_class_info_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				cls.setInner_name_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				cls.setInner_class_access_flags(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				
 				clses.add(cls);
 			}
@@ -57,17 +52,19 @@ public class InnerClasses extends AttributeInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
 			if (TransformUtil.bytesToInt(getNumber_of_classes()) > 0) {
 				int index = 0;
 				for (Classes cls : getClasses()) {
-					result += "InnerClass[" + index + "]: \n";
-					result += "\tinner_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getInner_class_info_index()) + "\n";
-					result += "\touter_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getOuter_class_info_index()) + "\n";
-					result += "\tinner_name : " + ClassModelParser.getUTF8(getCp_info(), cls.getInner_name_index()) + "\n";
-					result += "\tinner_class_access_flag : " + ClassModelParser.parseInnerClassAccessFlag(cls.getInner_class_access_flags()) + "\n";
+					result += space + "InnerClass[" + index + "]: \n";
+					result += space1 + "inner_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getInner_class_info_index()) + "\n";
+					result += space1 + "outer_class_info : " + ClassModelParser.getConstatnClass(getCp_info(), cls.getOuter_class_info_index()) + "\n";
+					result += space1 + "inner_name : " + ClassModelParser.getUTF8(getCp_info(), cls.getInner_name_index()) + "\n";
+					result += space1 + "inner_class_access_flag : " + ClassModelParser.parseInnerClassAccessFlag(cls.getInner_class_access_flags()) + "\n";
 					index++;
 				}
 			}

@@ -24,17 +24,14 @@ public class ConstantIntegerOrFloatInfo extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
-		try {
-			if (tag == CONSTANT_INTEGER) {
-				
-					result = "const #" + getIndex() + " =Integer\t " + TransformUtil.bytesToInt(bytes);
-			} else if (tag == CONSTANT_FLOAT) {
-					result = "const #" + getIndex() + " =Float\t " + TransformUtil.bytesToFloat(bytes) + "f";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (tag == CONSTANT_INTEGER) {
+			
+				result = space + "const #" + getIndex() + " =Integer" + space  + TransformUtil.bytesToInt(bytes);
+		} else if (tag == CONSTANT_FLOAT) {
+				result = space + "const #" + getIndex() + " =Float" + space + TransformUtil.bytesToFloat(bytes) + "f";
 		}
 		return result;
 	}

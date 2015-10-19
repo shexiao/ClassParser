@@ -31,9 +31,8 @@ public class LocalVariableTypeTable extends AttributeInfo {
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
-		int index = 0;
+		int[] index = new int[]{0};
 		setLocal_variable_type_table_length(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		
 		int length = TransformUtil.bytesToInt(getLocal_variable_type_table_length());
 		if (length > 0) {
@@ -41,15 +40,10 @@ public class LocalVariableTypeTable extends AttributeInfo {
 			for (int i = 0; i < length; i++) {
 				TypeTable typeTable = new TypeTable();
 				typeTable.setStart_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				typeTable.setLength(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				typeTable.setName_index(TransformUtil.subBytes(info,  index, 2));
-				index += 2;
 				typeTable.setSignature_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				typeTable.setIndex(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				
 				typeTables.add(typeTable);
 			}
@@ -58,14 +52,16 @@ public class LocalVariableTypeTable extends AttributeInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
 			if (TransformUtil.bytesToInt(getLocal_variable_type_table_length()) > 0) {
 				for (TypeTable table : getLocal_variable_type_table()) {
-					result += "LocalVariableTypeTable[" + table.getIndex() + "]:\n";
-					result += "\tstart_pc : length -> " +  table.getStart_pc() + " : " + table.getLength() + "\n";
-					result += "\tname : signature -> " + ClassModelParser.getUTF8(getCp_info(), table.getName_index()) + " : " + ClassModelParser.getUTF8(getCp_info(), table.getSignature_index()) + "\n";
+					result += space + "LocalVariableTypeTable[" + table.getIndex() + "]:\n";
+					result += space1 + "start_pc : length -> " +  table.getStart_pc() + " : " + table.getLength() + "\n";
+					result += space1 + "name : signature -> " + ClassModelParser.getUTF8(getCp_info(), table.getName_index()) + " : " + ClassModelParser.getUTF8(getCp_info(), table.getSignature_index()) + "\n";
 				}
 			}
 		} catch (Exception e) {

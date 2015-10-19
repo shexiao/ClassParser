@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.parser.ClassModelParser;
+import com.compiler.util.TransformUtil;
 
 public class ConstantValue extends AttributeInfo{
 	private byte[] constantvalue_index;
@@ -23,10 +24,11 @@ public class ConstantValue extends AttributeInfo{
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
-			result = "ConstantValue : " + ClassModelParser.getUTF8(getCp_info(), getConstantvalue_index());
+			result = space + "ConstantValue : " + ClassModelParser.getUTF8(getCp_info(), getConstantvalue_index());
 		}  catch (Exception e) {
 			e.printStackTrace();
 		}

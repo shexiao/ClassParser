@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.compiler.model.ClassModel;
+import com.compiler.model.attributeinfo.AnnotationDefault;
 import com.compiler.model.attributeinfo.AttributeInfo;
 import com.compiler.model.attributeinfo.BootstrapMethods;
 import com.compiler.model.attributeinfo.Code;
@@ -15,9 +16,14 @@ import com.compiler.model.attributeinfo.InnerClasses;
 import com.compiler.model.attributeinfo.LineNumberTable;
 import com.compiler.model.attributeinfo.LocalVariableTable;
 import com.compiler.model.attributeinfo.LocalVariableTypeTable;
+import com.compiler.model.attributeinfo.RuntimeInvisibleAnnotations;
+import com.compiler.model.attributeinfo.RuntimeInvisibleParameterAnnotations;
+import com.compiler.model.attributeinfo.RuntimeVisibleAnnotations;
+import com.compiler.model.attributeinfo.RuntimeVisibleParameterAnnotations;
 import com.compiler.model.attributeinfo.Signature;
 import com.compiler.model.attributeinfo.SourceDebugExtension;
 import com.compiler.model.attributeinfo.SourceFile;
+import com.compiler.model.attributeinfo.StackMapTable;
 import com.compiler.model.constantpool.ConstantPoolInfo;
 import com.compiler.util.TransformUtil;
 
@@ -115,6 +121,30 @@ public class AttributesParser implements IParser {
 			BootstrapMethods bootstrapMethods = new BootstrapMethods();
 			bootstrapMethods.parseSelf(attribute_info, cp_info);
 			return bootstrapMethods;
+		case AttributeInfo.STACKMAPTABLE:
+			StackMapTable stackMapTable = new StackMapTable();
+			stackMapTable.parseSelf(attribute_info, cp_info);
+			return stackMapTable;
+		case AttributeInfo.RUNTIMEVISIBLEANNOTATIONS:
+			RuntimeVisibleAnnotations runtimeVisibleAnnotations = new RuntimeVisibleAnnotations();
+			runtimeVisibleAnnotations.parseSelf(attribute_info, cp_info);
+			return runtimeVisibleAnnotations;
+		case AttributeInfo.RUNTIMEINVISIBLEANNOTATIONS:
+			RuntimeInvisibleAnnotations runtimeInvisibleAnnotations = new RuntimeInvisibleAnnotations();
+			runtimeInvisibleAnnotations.parseSelf(attribute_info, cp_info);
+			return runtimeInvisibleAnnotations;
+		case AttributeInfo.RUNTIMEVISIBLEPARAMETERANNOTATIONS:
+			RuntimeVisibleParameterAnnotations runtimeVParamAnno = new RuntimeVisibleParameterAnnotations();
+			runtimeVParamAnno.parseSelf(attribute_info, cp_info);
+			return runtimeVParamAnno;
+		case AttributeInfo.RUNTIMEINVISIBLEPARAMETERANNOTATIONS:
+			RuntimeInvisibleParameterAnnotations runtimeIParamAnno = new RuntimeInvisibleParameterAnnotations();
+			runtimeIParamAnno.parseSelf(attribute_info, cp_info);
+			return runtimeIParamAnno;
+		case AttributeInfo.ANNOTATIONDEFAULT:
+			AnnotationDefault annotationDefault = new AnnotationDefault();
+			annotationDefault.parseSelf(attribute_info, cp_info);
+			return annotationDefault;
 		default:
 			return attribute_info;
 		}

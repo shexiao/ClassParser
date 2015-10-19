@@ -25,10 +25,11 @@ public class ConstantStringInfo extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		try {
-			result = "const #" + getIndex() + " =String\t #" + TransformUtil.bytesToInt(string_index);
+			result = space + "const #" + getIndex() + " =String" + space + "#" + TransformUtil.bytesToInt(string_index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -24,13 +24,10 @@ public class ConstantClassInfo extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
 		String result = "";
-		try {
-			result = "const #" + getIndex() + " =class\t #" + TransformUtil.bytesToInt(name_index);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		result = space + "const #" + getIndex() + " =class" + space + " #" + TransformUtil.bytesToInt(name_index);
 		return result;
 	}
 }

@@ -31,9 +31,8 @@ public class LocalVariableTable extends AttributeInfo{
 	public void parseSelf(AttributeInfo attributeInfo, List<ConstantPoolInfo> cp_info) throws Exception {
 		super.parseSelf(attributeInfo, cp_info);
 		byte[] info = attributeInfo.getInfo();
-		int index = 0;
+		int[] index = new int[]{0};
 		setLocal_variable_table_length(TransformUtil.subBytes(info, index, 2));
-		index += 2;
 		
 		int length = TransformUtil.bytesToInt(getLocal_variable_table_length());
 		if (length > 0) {
@@ -41,15 +40,10 @@ public class LocalVariableTable extends AttributeInfo{
 			for (int i = 0; i < length; i++) {
 				LocalVariableTable1 table = new LocalVariableTable1();
 				table.setStart_pc(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				table.setLength(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				table.setName_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				table.setDescriptor_index(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				table.setIndex(TransformUtil.subBytes(info, index, 2));
-				index += 2;
 				tables.add(table);
 			}
 			setLocal_variable_table(tables);
@@ -57,15 +51,17 @@ public class LocalVariableTable extends AttributeInfo{
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) throws Exception {
+		String space = TransformUtil.spaces(length);
+		String space1 = TransformUtil.spaces(length + 4);
 		String result = "";
 		try {
-			int length = TransformUtil.bytesToInt(getLocal_variable_table_length());
-			System.out.println("\t\tLocalVariableTable:");
-			result += "\t\t\tstart\tlength\tslot\tname\tsignature\n";
-			for (int i = 0; i < length; i++) {
+			int len = TransformUtil.bytesToInt(getLocal_variable_table_length());
+			result += space + "LocalVariableTable:\n";
+			result += space1 + "start\tlength\tslot\tname\tsignature\n";
+			for (int i = 0; i < len; i++) {
 				LocalVariableTable1 lvtable = this.local_variable_table.get(i);
-				result +="\t\t\t"+ TransformUtil.bytesToInt(lvtable.getStart_pc()) + "\t"
+				result += space1 + TransformUtil.bytesToInt(lvtable.getStart_pc()) + "\t"
 						+ TransformUtil.bytesToInt(lvtable.getLength()) + "\t" 
 						+ TransformUtil.bytesToInt(lvtable.getIndex()) + "\t"
 //						+ TransformUtil.bytesToInt(lvtable.getName_index()) + "\t"

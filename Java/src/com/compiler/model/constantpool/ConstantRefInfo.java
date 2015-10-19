@@ -32,7 +32,8 @@ public class ConstantRefInfo extends ConstantPoolInfo {
 	}
 	
 	@Override
-	public String toString() {
+	public String print(int length) {
+		String space = TransformUtil.spaces(length);
 		String result = "";
 		String type = "";
 		try {
@@ -43,7 +44,7 @@ public class ConstantRefInfo extends ConstantPoolInfo {
 			} else if (tag == CONSTANT_INTERFACEMETHODREF) {
 				type = "interfacemethod";
 			}
-			result = "const #" + getIndex() + " =" + type + "\t #" + TransformUtil.bytesToInt(class_index) + ".#" + TransformUtil.bytesToInt(name_and_type_index);
+			result = space + "const #" + getIndex() + " =" + type + space + "#" + TransformUtil.bytesToInt(class_index) + ".#" + TransformUtil.bytesToInt(name_and_type_index);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
